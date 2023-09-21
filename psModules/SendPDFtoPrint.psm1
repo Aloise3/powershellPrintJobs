@@ -24,7 +24,6 @@ function Start-SendPDFtoPrint {
         foreach ($pdfFile in $pdfFiles) {
             # Move the PDF file to the destination folder
             Move-Item -Path $pdfFile.FullName -Destination $destinationFolder -Force
-            Write-Host "Fil er rykket"
 
 
             if ($ExcelFilePath) {
@@ -58,14 +57,14 @@ function Start-SendPDFtoPrint {
                 $pdfFile | Out-Printer -Name $printerName
                 } -ArgumentList $pdfFile.FullName, $printerName | Wait-Job | Receive-Job
             
-            }
+                }
 
-            else {
-                Start-Process -FilePath $pdfFile.FullName -Verb Print -PassThru | ForEach-Object {
-                # Vent på printeren
-                $_ | Wait-PrinterJob 
-            }
-            }
+                else {
+                    Start-Process -FilePath $pdfFile.FullName -Verb Print -PassThru | ForEach-Object {
+                    # Vent på printeren
+                    $_ | Wait-PrinterJob 
+                    }
+                }
             
             # Send en mail
             Send-MailMessage -SmtpServer $SmtpServer -From $senderEmail -To $recipientEmail -Subject "Der er printet en fil - sendt til printer '$printerName'"  -Body "Attached is the PDF file that was printed." -Attachments $pdfFile.FullName
