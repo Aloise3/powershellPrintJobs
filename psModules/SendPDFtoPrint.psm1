@@ -26,10 +26,20 @@ function Start-SendPDFtoPrint {
             Move-Item -Path $pdfFile.FullName -Destination $destinationFolder -Force
             Write-Host "Fil er rykket"
 
-            # 
-            Start-Process -FilePath $pdfFile.FullName -Verb Print -PassThru | ForEach-Object {
+            if ($printerName) {
+                # Print the PDF file to the specified printer
+                Start-Job -ScriptBlock {
+                param ($pdfFile, $printerName)
+                $pdfFile | Out-Printer -Name $printerName
+                } -ArgumentList $pdfFile.FullName, $printerName | Wait-Job | Receive-Job
+
+            }
+
+            else {
+                Start-Process -FilePath $pdfFile.FullName -Verb Print -PassThru | ForEach-Object {
                 # Vent på printeren
                 $_ | Wait-PrinterJob 
+            }
             }
             
             # Send en mail
