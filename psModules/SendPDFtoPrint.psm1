@@ -26,13 +26,38 @@ function Start-SendPDFtoPrint {
             Move-Item -Path $pdfFile.FullName -Destination $destinationFolder -Force
             Write-Host "Fil er rykket"
 
+
+            if ($ExcelFilePath) {
+                # Laver en excel-fil
+                $excel = New-Object -ComObject Excel.Application
+                $excel.Visible = $false
+                $workbook = $excel.Workbooks.Open($ExcelFilePath)  # Bruger prædefineret sti
+                $worksheet = $workbook.Worksheets.Item(1) # Første side
+
+                # Kolonneoverskrifter
+                $worksheet.Cells.Item(1, 1).Value2 = "Fil"
+                $worksheet.Cells.Item(1, 2).Value2 = "Printet tidspunkt"
+                $worksheet.Cells.Item(1, 3).Value2 = "Bruger"
+
+                # Append data to Excel
+                $row = $worksheet.UsedRange.Rows.Count + 1
+                $worksheet.Cells.Item($row, 1).Value2 = $pdfFile
+                $worksheet.Cells.Item($row, 2).Value2 = $timestamp
+                $worksheet.Cells.Item($row, 3).Value2 = $Env:UserName
+
+                # Gemmer exceloversigt
+                $workbook.Save()
+                $excel.Quit()
+
+                }
+
             if ($printerName) {
                 # Print the PDF file to the specified printer
                 Start-Job -ScriptBlock {
                 param ($pdfFile, $printerName)
                 $pdfFile | Out-Printer -Name $printerName
                 } -ArgumentList $pdfFile.FullName, $printerName | Wait-Job | Receive-Job
-
+            
             }
 
             else {
