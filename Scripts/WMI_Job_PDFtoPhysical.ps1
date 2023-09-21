@@ -20,7 +20,7 @@ $destinationFolder = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\Arkiverede ra
 ############### REDIGER VARIABLE SLUT #######################
 
 
-    Start-SendPDFtoPrint -SmtpServer $smptServer  -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder -printerName $printerName
+    Start-SendPDFtoPrint -SmtpServer $smptServer  -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder 
 
     #Ikke brugte inputs:
     #$senderEmail - Default: PrintJobs
