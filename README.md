@@ -1,5 +1,7 @@
 # powershellPrintJobs
 
+### OBS: Lavet i en hurtig vending privat og fungerer på eget lokale miljø. Kræver tilpasning af større eller mindre art afhængig af serveropsætning.
+
 ## Generel info
 Dette modul viser to forskellige metoder til at overvåge og opsnappe information om printerejobs og tilhørende filer. 
 
