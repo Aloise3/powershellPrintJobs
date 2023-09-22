@@ -1,7 +1,7 @@
 # powershellPrintJobs
 
 ## Generel info
-Dette modul viser to forskellige metoder til at overvåge og opsnappe information om printere. 
+Dette modul viser to forskellige metoder til at overvåge og opsnappe information om printerejobs og tilhørende filer. 
 
 ### Metode 1: WMI-Event til logning og mailing
 
