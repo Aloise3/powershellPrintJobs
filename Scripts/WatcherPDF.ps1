@@ -16,7 +16,7 @@ $sourceFolder = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest"
 
 $destinationFolder = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\Arkiverede rapporter"
 
-$logPath = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\logbog.xlsx"  #Excel til oversigt over dine historiske printjobs. Kommenter ud hvis det ikke ønskes
+$logPath = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\logbog.xlsx"  #Excel til oversigt over dine historiske printjobs. Kommenter ud hvis det ikke ønskes. Kan bruge .xlsx eller .txt
 
 #$printerName = "" #Navn på Printer
 

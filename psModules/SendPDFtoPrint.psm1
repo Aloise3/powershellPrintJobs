@@ -30,7 +30,11 @@ function Write-Log {
         $workbook.Save()
         $excel.Quit() 
     }
+    if ($logFilePath -and $logFilePath -like "*.txt") { #Hvis man foretrækker en tekstfil
 
+        $logMessage = "$time - Filnavn: $name, Bruger: $user."
+        $logMessage | Out-File -FilePath $logFilePath -Append
+    }
 }
 
 function Start-execPrinter {
