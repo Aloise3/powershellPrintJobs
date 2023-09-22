@@ -14,18 +14,6 @@ function Start-PrintJobMonitor {
     # WMI Query til at tjekke Printjobs
     $query = "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_PrintJob'"
 
-    if ($ExcelFilePath) {
-        # Laver en excel-fil
-        $excel = New-Object -ComObject Excel.Application
-        $excel.Visible = $false
-        $workbook = $excel.Workbooks.Open($ExcelFilePath)  # Bruger prædefineret sti
-        $worksheet = $workbook.Worksheets.Item(1) # Første side
-
-        # Kolonneoverskrifter
-        $worksheet.Cells.Item(1, 1).Value2 = "Fil"
-        $worksheet.Cells.Item(1, 2).Value2 = "Printet tidspunkt"
-        $worksheet.Cells.Item(1, 3).Value2 = "Bruger"
-    }
     
     # Register an event handler to execute when a print job is created
     Register-WmiEvent -Query $query -SourceIdentifier $SourceIdentifier -Action { #Tjekker om der er et nyt event
@@ -50,6 +38,16 @@ function Start-PrintJobMonitor {
                 Copy-Item -Path $fileName -Destination $destinationPath #>
 
                 if ($ExcelFilePath) {
+                    # Laver en excel-fil
+                    $excel = New-Object -ComObject Excel.Application
+                    $excel.Visible = $false
+                    $workbook = $excel.Workbooks.Open($ExcelFilePath)  # Bruger prædefineret sti
+                    $worksheet = $workbook.Worksheets.Item(1) # Første side
+
+                    # Kolonneoverskrifter
+                    $worksheet.Cells.Item(1, 1).Value2 = "Fil"
+                    $worksheet.Cells.Item(1, 2).Value2 = "Printet tidspunkt"
+                    $worksheet.Cells.Item(1, 3).Value2 = "Bruger"
                     # Append data to Excel
                     $row = $worksheet.UsedRange.Rows.Count + 1
                     $worksheet.Cells.Item($row, 1).Value2 = $fileName
