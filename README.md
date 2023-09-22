@@ -14,7 +14,7 @@ Kan derfor kun bruges til dokumentation af, at man har sat et printerjob igang
 
 ### Metode 2: Opsamling af PDF-print til videre distribuering
 
-Denne metode antager, at man initielt laver print til pdf, og ligger pdf-filen i en mappe, der observerer. På et arbitrært interval tjekkes folderen for nye pdf filer. 
+Denne metode antager, at man initielt laver print til pdf, og ligger pdf-filen i en mappe, der observeres af et program. På et arbitrært interval tjekkes folderen for nye pdf filer. Eksemplet tjekker hvert 10. sekund, men hver 2-5 minutter er nok mere realistisk i virkeligheden.
 
 Findes en (eller flere) ny pdf-fil logges det i et excel-ark, samt sendes et fysisk printerjob til en navngivet printer. 
 Til sidst sendes en notifikations-mail med den vedhæftede fil og filen rykkes over i en 'Arkiv'-mappe.
