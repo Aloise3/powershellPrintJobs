@@ -62,14 +62,12 @@ function Start-PrintJobMonitor {
         if ($ownerName = $userName) {
             
             if ($logpath) {
-                Write-Log -name -time -user -logFilePath
+                Write-Log -name $fileName -time $timestamp -user $ownerName -logFilePath $logpath
             }
                     
             # Sender en mail
-            Send-MailMessage -From $senderEmail -To $recipientEmail -Subject "Print Job udført på '$filename'" -Body "Print job '$fileName' er blevet printet af '$ownerName' d. '$timestamp' i printer '$printerName' " -SmtpServer $SmtpServer #-Attachments $destinationPath
-
-
-
+            Send-MailMessage -From $senderEmail -To $recipientEmail -Subject "Print Job udført på '$filename'" -Body "Print job '$fileName' er blevet printet af '$ownerName' d. '$timestamp' i printer '$printerName'. Log findes på '$logpath' " -SmtpServer $SmtpServer #-Attachments $destinationPath
+        }
     }
 }
 

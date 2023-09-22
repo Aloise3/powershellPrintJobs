@@ -13,9 +13,8 @@ $ModtagerMail = "abc@123.dk"  #Mail, der skal modtage notifikationer
 
 $smptServer = "din.smtp.server.dk" 
 
-$excelPath = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\test.xlsx"  #Excel til oversigt over dine historiske printjobs. Kommenter ud hvis det ikke ønskes
+$logpath = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\logbog.xlsx"  #Excel til oversigt over dine historiske printjobs. Kommenter ud hvis det ikke ønskes
 
-#$tempPath  = "C:/temp"  #Sti til midlertidig copy-paste fra printjob. Bruges ikke i nuværende setup
 
 ############### REDIGER VARIABLE SLUT #######################
 
@@ -24,14 +23,13 @@ if ($StartEllerSletProces -eq 1) {
     Start-PrintJobMonitor {
     -SmtpServer $smptServer #SMTP-server. Rediger ovenfor. 
     -userName $Env:UserName  #Brugerens navn
-       if ($excelPath) {         #Laver kun et excelark, hvis det udfyldes foroven.
-            -ExcelFilePath $excelPath 
-            } 
+    -ExcelFilePath $logpath 
+
     -SourceIdentifier $WMIjobNavn #Navn på job. Rediger ovenfor.
     -recipientEmail $ModtagerMail #Modtagermail. Rediger ovenfor.
     #Ikke brugte inputs:
     #senderEmail - Default: PrintJobs
-    #tempPath - Ikke brugbar. Kræver oversættelse af spoolerkommandoer og det kræver tid og indsigt i det specifikke printersetup. Variabel er en midlertidig sti til opbevaring af fil inden den kopieres ind i mail. Evt. bare sæt sti til excelarkets sti.
+
     }
 
 
