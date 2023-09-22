@@ -13,7 +13,7 @@ $sourceFolder = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest"
 
 $destinationFolder = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\Arkiverede rapporter"
 
-#$excelPath = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\test.xlsx"  #Excel til oversigt over dine historiske printjobs. Kommenter ud hvis det ikke ønskes
+$logPath = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\logbog.xlsx"  #Excel til oversigt over dine historiske printjobs. Kommenter ud hvis det ikke ønskes
 
 #$printerName = "" #Navn på Printer
 
@@ -30,14 +30,13 @@ $watcher.NotifyFilter = [System.IO.NotifyFilters]::FileName
 $action = {
     $file = $Event.SourceEventArgs.Name
     if ($file -match '\.pdf') {
-        Write-Host "PDF fil fundet: '$file'"
-
         # Sender job til at maile, pakke og dokumentere print
-         Start-SendPDFtoPrint -SmtpServer $smptServer  -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder -runspecificstuff 0 #Testvariabel til ikke fysisk at printe eller ligge i excel
+         Start-SendPDFtoPrint -SmtpServer $smptServer  -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder -logPath $logPath  -runspecificstuff 0 #Testvariabel til ikke fysisk at printe eller ligge i excel
              #Ikke brugte inputs:
             #$senderEmail - Default: PrintJobs
             #$excelPath - Skal defineres øverst og inkluderes
             #$printerName - Kun hvis der skal bruges en ikke-standard printer.
+            #$user - Sættes default til brugeren, der kører scriptet
     }
 }
 
@@ -51,7 +50,7 @@ Write-Host "Tryk Ctrl+C for at stoppe processen."
 try {
     while ($true) {
         # Sov i x minutter førend det kører igen
-        Start-Sleep -Seconds 120
+        Start-Sleep -Seconds 10
     }
 }
 finally {
