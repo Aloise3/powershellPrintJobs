@@ -3,6 +3,9 @@
 #Tilføj rettigheder til at importere scripts. Udkommenter den ene linje under.
 #Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 
+
+#Ikke den mest sofistikerede løsning, men 
+
 ###############REDIGER VARIABLE #######################
 
 $smptServer = "din.smtp.server.dk" 
@@ -31,11 +34,13 @@ $action = {
     $file = $Event.SourceEventArgs.Name
     if ($file -match '\.pdf') {
         # Sender job til at maile, pakke og dokumentere print
-         Start-SendPDFtoPrint -SmtpServer $smptServer  -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder -logPath $logPath  -runspecificstuff 0 #Testvariabel til ikke fysisk at printe eller ligge i excel
-             #Ikke brugte inputs:
-            #$senderEmail - Default: PrintJobs
-            #$printerName - Kun hvis der skal bruges en ikke-standard printer.
-            #$user - Sættes default til brugeren, der kører scriptet
+         Start-SendPDFtoPrint -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder -logPath $logPath  #Testvariabel til ikke fysisk at printe eller ligge i excel
+
+            #Ikke brugte inputs:
+                #$senderEmail - Default: PrintJobs
+                #$printerName - Kun hvis der skal bruges en ikke-standard printer.
+                #$smtpserver - Tilføjes hvis man vil sende en mail. 
+                #$user - Sættes default til brugeren, der kører scriptet
     }
 }
 

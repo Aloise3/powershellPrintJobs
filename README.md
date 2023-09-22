@@ -3,7 +3,7 @@
 ## Generel info
 Dette modul viser to forskellige metoder til at overvåge og opsnappe information om printerejobs og tilhørende filer. 
 
-### Metode 1: WMI-Event til logning og mailing
+### Metode 1: WMI-Event til logning og mailing (WMI_Job.ps1)
 
 Denne metode opsnapper Events, der sendes til printere, som computeren er forbundet til og opsamler filnavn, tidspunkt og bruger i en logfil (.xlsx). 
 Derefter sendes en mail med relevante informationer.
@@ -12,7 +12,7 @@ Metoden har den begrænsning, at det er et enormt projekt at genskabe selve file
 
 Kan derfor kun bruges til dokumentation af, at man har sat et printerjob igang
 
-### Metode 2: Opsamling af PDF-print til videre distribuering
+### Metode 2: Opsamling af PDF-print til videre distribuering (WatcherPDF.ps1)
 
 Denne metode antager, at man initielt laver print til pdf, og ligger pdf-filen i en mappe, der observeres af et program. På et arbitrært interval tjekkes folderen for nye pdf filer. Eksemplet tjekker hvert 10. sekund, men hver 2-5 minutter er nok mere realistisk i virkeligheden.
 

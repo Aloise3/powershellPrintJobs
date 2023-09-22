@@ -66,8 +66,7 @@ function Start-SendPDFtoPrint {
         [string]$sourceFolder,
         [string]$destinationFolder,
         [string]$printerName, 
-        [string]$user = $env:USERNAME,
-        [int]$runspecificstuff = 1
+        [string]$user = $env:USERNAME
     )
 
     # Få en liste over pdf filer
@@ -85,13 +84,15 @@ function Start-SendPDFtoPrint {
                 }
                 }
 
-            if ($runspecificstuff -eq 1) {
+            if ($printerName) {
                 try {
                     Start-execPrinter -printerName $printerName -pdfFile $pdfFile.FullName
                 } catch {
                         $errvariable = "Fejl: Print blev ikke sendt"
                 }
+            }
 
+            if ($SmtpServer) {
                  # Send en mail
                 try {
                     Send-MailMessage -SmtpServer $SmtpServer -From $senderEmail -To $recipientEmail -Subject "Der er printet en fil - sendt til printer '$printerName'"  -Body "Attached is the PDF file that was printed." -Attachments $pdfFile.FullName
