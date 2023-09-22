@@ -70,33 +70,22 @@ function Start-SendPDFtoPrint {
         [int]$runspecificstuff = 1
     )
 
-
-
     # Få en liste over pdf filer
     $pdfFiles = Get-ChildItem -Path $sourceFolder -Filter *.pdf
-
-    
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss" #tidspunkt
-    # Se om der er fundet pdf-filer
+
     if ($pdfFiles.Count -gt 0) {
-        # loop gennem alle filer (hvis man hurtigt tilføjer flere)
-        foreach ($pdfFile in $pdfFiles) {
-            Write-Host "navn: '$pdfFiles'"
-            Write-Host "tidspunkt: '$timestamp'"
-            Write-Host "bruger: '$env:USERNAME'"
-            
+        foreach ($pdfFile in $pdfFiles) {          
             
             if ($logPath) {
                 Write-Log -name $pdfFile -time $timestamp -user $env:USERNAME -logFilePath $logPath
                 }
 
-            
             if ($runspecificstuff -eq 1) {
                 Start-execPrinter -printerName $printerName -pdfFile $pdfFiles
             }
-            # Flyt filen til arkiv
 
-            Move-Item -Path $pdfFile.FullName -Destination $destinationFolder -Force
+            Move-Item -Path $pdfFile.FullName -Destination $destinationFolder -Force #Rykker til arkiv
             
 
             <# # Send en mail
