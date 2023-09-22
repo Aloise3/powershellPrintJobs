@@ -82,7 +82,7 @@ function Start-SendPDFtoPrint {
                 } catch {
                         $errvariable = "Fejl: Logning blev ikke gennemført"
                 }
-                }
+            }
 
             if ($printerName) {
                 try {
