@@ -15,7 +15,7 @@ function Start-PrintJobMonitor {
     $query = "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_PrintJob'"
 
     
-    # Register an event handler to execute when a print job is created
+    # Registrer event der fyres af, når et nyt printerjob kommer
     Register-WmiEvent -Query $query -SourceIdentifier $SourceIdentifier -Action { #Tjekker om der er et nyt event
         $eventArgs = $Event.SourceEventArgs.NewEvent
         $printJob = $eventArgs.TargetInstance #Eventinformationer

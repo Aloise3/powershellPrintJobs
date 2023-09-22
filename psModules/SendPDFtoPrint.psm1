@@ -14,14 +14,14 @@ function Start-SendPDFtoPrint {
 
 
 
-    # Get a list of PDF files in the source folder
+    # Få en liste over pdf filer
     $pdfFiles = Get-ChildItem -Path $sourceFolder -Filter *.pdf
 
     
     $timestamp = Get-Date -Format "dd/MM/yyyy kl. hh:mm" #tidspunkt
-    # Check if any PDF files are found
+    # Se om der er fundet pdf-filer
     if ($pdfFiles.Count -gt 0) {
-        # Loop through each PDF file found
+        # loop gennem alle filer (hvis man hurtigt tilføjer flere)
         foreach ($pdfFile in $pdfFiles) {
             
             if ($runspecificstuff -eq 1) {
