@@ -1,7 +1,28 @@
 # powershellPrintJobs
 
+## Generel info
+Dette modul viser to forskellige metoder til at overvåge og opsnappe information om printere. 
 
-## Opsætning af task
+### Metode 1: WMI-Event til logning og mailing
+
+Denne metode opsnapper Events, der sendes til printere, som computeren er forbundet til og opsamler filnavn, tidspunkt og bruger i en logfil (.xlsx). 
+Derefter sendes en mail med relevante informationer.
+
+Metoden har den begrænsning, at det er et enormt projekt at genskabe selve filen, så derfor kan filen ikke vedhæftes en notifikationsmail. 
+
+Kan derfor kun bruges til dokumentation af, at man har sat et printerjob igang
+
+### Metode 2: Opsamling af PDF-print til videre distribuering
+
+Denne metode antager, at man initielt laver print til pdf, og ligger pdf-filen i en mappe, der observerer. På et arbitrært interval tjekkes folderen for nye pdf filer. 
+
+Findes en (eller flere) ny pdf-fil logges det i et excel-ark, samt sendes et fysisk printerjob til en navngivet printer. 
+Til sidst sendes en notifikations-mail med den vedhæftede fil og filen rykkes over i en 'Arkiv'-mappe.
+
+Denne metode fører dermed filen med over i email-notifikationen, men har den begrænsning, at man skal printe en pdf-fil på et bestemt drev. Ellers klares resten automatisk.
+
+
+## Opsætning af task i scheduler
 
 ### Åbn Opgavestyring:
 
