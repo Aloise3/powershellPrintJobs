@@ -8,7 +8,7 @@ function Write-Log {
         [string]$logFilePath
     )
 
-    if ($logFilePath -and $logFilePath -like "*.xlsx") {
+    if ($logFilePath -like "*.xlsx") {
                     
         # Laver en excel-fil
         $excel = New-Object -ComObject Excel.Application
@@ -30,7 +30,7 @@ function Write-Log {
         $workbook.Save()
         $excel.Quit() 
     }
-    if ($logFilePath -and $logFilePath -like "*.txt") { #Hvis man foretrækker en tekstfil
+    if ($logFilePath -like "*.txt") { #Hvis man foretrækker en tekstfil
 
         $logMessage = "$time - Filnavn: $name, Bruger: $user."
         $logMessage | Out-File -FilePath $logFilePath -Append
