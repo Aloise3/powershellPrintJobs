@@ -105,10 +105,8 @@ function Start-SendPDFtoPrint {
                             $errvariable = "Fejl: Mailafsendelse"
                         }
                         $body = "Mail for printjob med vedhæftning har fejlet pga. '$errvariable'"
+                        Send-MailMessage -SmtpServer $SmtpServer -From $senderEmail -To $recipientEmail -Subject "Printjob har fejlet'"  -Body $body
                 }
-                finally {
-                    Send-MailMessage -SmtpServer $SmtpServer -From $senderEmail -To $recipientEmail -Subject "Printjob har fejlet'"  -Body $body 
-                } 
             }
             Move-Item -Path $pdfFile.FullName -Destination $destinationFolder -Force #Rykker til arkiv
         }
