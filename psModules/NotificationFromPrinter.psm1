@@ -38,25 +38,29 @@ function Start-PrintJobMonitor {
                 Copy-Item -Path $fileName -Destination $destinationPath #>
 
                 if ($ExcelFilePath) {
-                    # Laver en excel-fil
-                    $excel = New-Object -ComObject Excel.Application
-                    $excel.Visible = $false
-                    $workbook = $excel.Workbooks.Open($ExcelFilePath)  # Bruger prædefineret sti
-                    $worksheet = $workbook.Worksheets.Item(1) # Første side
+                    try {
+                        # Laver en excel-fil
+                        $excel = New-Object -ComObject Excel.Application
+                        $excel.Visible = $false
+                        $workbook = $excel.Workbooks.Open($ExcelFilePath)  # Bruger prædefineret sti
+                        $worksheet = $workbook.Worksheets.Item(1) # Første side
 
-                    # Kolonneoverskrifter
-                    $worksheet.Cells.Item(1, 1).Value2 = "Fil"
-                    $worksheet.Cells.Item(1, 2).Value2 = "Printet tidspunkt"
-                    $worksheet.Cells.Item(1, 3).Value2 = "Bruger"
-                    # Append data to Excel
-                    $row = $worksheet.UsedRange.Rows.Count + 1
-                    $worksheet.Cells.Item($row, 1).Value2 = $fileName
-                    $worksheet.Cells.Item($row, 2).Value2 = $timestamp
-                    $worksheet.Cells.Item($row, 3).Value2 = $ownerName
+                        # Kolonneoverskrifter
+                        $worksheet.Cells.Item(1, 1).Value2 = "Fil"
+                        $worksheet.Cells.Item(1, 2).Value2 = "Printet tidspunkt"
+                        $worksheet.Cells.Item(1, 3).Value2 = "Bruger"
+                        # Append data to Excel
+                        $row = $worksheet.UsedRange.Rows.Count + 1
+                        $worksheet.Cells.Item($row, 1).Value2 = $fileName
+                        $worksheet.Cells.Item($row, 2).Value2 = $timestamp
+                        $worksheet.Cells.Item($row, 3).Value2 = $ownerName
 
-                    # Gemmer exceloversigt
-                    $workbook.Save()
-                    $excel.Quit()
+                        # Gemmer exceloversigt
+                        $workbook.Save()
+                        $excel.Quit() 
+                    } catch {
+                        $errvariable = "Fejl: Tilføjelse til excelark"
+                        }
                     }
                     
                 # Sender en mail
@@ -64,10 +68,15 @@ function Start-PrintJobMonitor {
 
                 }
             catch {
-                Send-MailMessage -From $senderEmail -To $recipientEmail -Subject "Print Job fejl for $jobName!" -Body "Mail for printjob med vedhæftning har fejlet pga. at der er sat en forkert midlertidig sti." -SmtpServer $SmtpServer
+                if (-Not $errvariable) {
+                    $errvariable = "Fejl: Mailserver har ikke sendt en mail"
+                }
+                    $body = "Mail for printjob med vedhæftning har fejlet pga. '$errvariable'"
+
+
                 }
             finally {
-                Write-Host "Jobbet $SourceIdentifier er sat op til modtager $recipientEmail"
+                 Send-MailMessage -From $senderEmail -To $recipientEmail -Subject "Print Job fejl for $jobName!" -Body $body -SmtpServer $SmtpServer
                 }
 
             }
