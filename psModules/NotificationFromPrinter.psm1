@@ -31,7 +31,11 @@ function Write-Log {
         $workbook.Save()
         $excel.Quit() 
     }
+    if ($logFilePath -and $logFilePath -like "*.txt") { #Hvis man foretrækker en tekstfil
 
+        $logMessage = "$time - Filnavn: $name, Bruger: $user."
+        $logMessage | Out-File -FilePath $logFilePath -Append
+    }
 }
 
 
@@ -64,9 +68,10 @@ function Start-PrintJobMonitor {
             if ($logpath) {
                 Write-Log -name $fileName -time $timestamp -user $ownerName -logFilePath $logpath
             }
-                    
+            if ($SmtpServer) {        
             # Sender en mail
-            Send-MailMessage -From $senderEmail -To $recipientEmail -Subject "Print Job udført på '$filename'" -Body "Print job '$fileName' er blevet printet af '$ownerName' d. '$timestamp' i printer '$printerName'. Log findes på '$logpath' " -SmtpServer $SmtpServer #-Attachments $destinationPath
+                Send-MailMessage -From $senderEmail -To $recipientEmail -Subject "Print Job udført på '$filename'" -Body "Print job '$fileName' er blevet printet af '$ownerName' d. '$timestamp' i printer '$printerName'. Log findes på '$logpath' " -SmtpServer $SmtpServer #-Attachments $destinationPath
+            }
         }
     }
 }

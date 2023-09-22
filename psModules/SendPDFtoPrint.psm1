@@ -37,28 +37,43 @@ function Write-Log {
     }
 }
 
+
+function Change-DefaultPrinter {
+    param (
+        [string]$printerName
+    )
+
+    $originalDefaultPrinter = Get-WmiObject -Query "SELECT * FROM Win32_Printer WHERE Default=$true"
+    $desiredPrinter = Get-WmiObject -Query "SELECT * FROM Win32_Printer WHERE Name='$printerName'"
+
+    if ($desiredPrinter) {
+        $desiredPrinter.SetDefaultPrinter()
+    }
+
+    return $originalDefaultPrinter
+}
+
+function Return-DefaultPrinter {
+    param (
+        [object]$originalDefaultPrinter
+    )
+
+    if ($originalDefaultPrinter) {
+        $originalDefaultPrinter.SetDefaultPrinter()
+    }
+}
+
 function Start-execPrinter {
         param (
             [string]$printerName,
             [string]$pdfFile
         )
-
-        if ($printerName) {
-            # Send til specifik printer
-            Start-Job -ScriptBlock {
-            param ($pdfFile, $printerName)
-            $pdfFile | Out-Printer -Name $printerName
-            } -ArgumentList $pdfFile.FullName, $printerName | Wait-Job | Receive-Job
-        } 
-        else 
-        {
-            Start-Process -FilePath $pdfFile.FullName -Verb Print -PassThru | ForEach-Object {
-            # Vent på printeren
-            $_ | Wait-PrinterJob }
-        } 
+              
+        Start-Process -FilePath $pdfFile.FullName -Verb Print -PassThru | ForEach-Object {
+        # Vent på printeren
+        $_ | Wait-PrinterJob }
+        
 }
-
-
 
 
 function Start-SendPDFtoPrint {
@@ -89,13 +104,19 @@ function Start-SendPDFtoPrint {
             }
 
             if ($printerName) {
-                try {
-                    Start-execPrinter -printerName $printerName -pdfFile $pdfFile.FullName
-                } catch {
-                        $errvariable = "Fejl: Print blev ikke sendt"
-                }
+                $originalDefaultPrinter = Change-DefaultPrinter -printerName $printerName
             }
 
+            try {
+                Start-execPrinter -printerName $printerName -pdfFile $pdfFile.FullName
+            } catch {
+                    $errvariable = "Fejl: Print blev ikke sendt"
+            }
+
+            if ($printerName) {
+                Return-DefaultPrinter -originalDefaultPrinter $originalDefaultPrinter
+            }
+            
             if ($SmtpServer) {
                  # Send en mail
                 try {
