@@ -54,7 +54,7 @@ function Start-SendPDFtoPrint {
 
                 try {
                     if ($printerName) {
-                        # Print the PDF file to the specified printer
+                        # Send til specifik printer
                         Start-Job -ScriptBlock {
                         param ($pdfFile, $printerName)
                         $pdfFile | Out-Printer -Name $printerName
@@ -75,6 +75,9 @@ function Start-SendPDFtoPrint {
                 try {
                     Send-MailMessage -SmtpServer $SmtpServer -From $senderEmail -To $recipientEmail -Subject "Der er printet en fil - sendt til printer '$printerName'"  -Body "Attached is the PDF file that was printed." -Attachments $pdfFile.FullName
                 } catch {
+                    if (-not $errvariable) {
+                    $errvariable = "Fejl: Mailafsendelse"
+                    }
                     $body = "Mail for printjob med vedhæftning har fejlet pga. '$errvariable'"
                 }
                 finally {
