@@ -30,10 +30,10 @@ $watcher.NotifyFilter = [System.IO.NotifyFilters]::FileName
 $action = {
     $file = $Event.SourceEventArgs.Name
     if ($file -match '\.pdf') {
-        Write-Host "PDF fil fundet: '$pdfFiles'"
+        Write-Host "PDF fil fundet: '$file'"
 
         # Sender job til at maile, pakke og dokumentere print
-         Start-SendPDFtoPrint -SmtpServer $smptServer  -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder 
+         Start-SendPDFtoPrint -SmtpServer $smptServer  -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder -runspecificstuff 0 #Testvariabel til ikke fysisk at printe eller ligge i excel
              #Ikke brugte inputs:
             #$senderEmail - Default: PrintJobs
             #$excelPath - Skal defineres øverst og inkluderes
@@ -46,11 +46,11 @@ Register-ObjectEvent -InputObject $watcher -EventName Created -SourceIdentifier 
 
 # Start monitoring
 $watcher.EnableRaisingEvents = $true
-
-# Scriptet kører hvert x. sekund
+Write-Host "Venter på nye filer..."
+Write-Host "Tryk Ctrl+C for at stoppe processen."
 try {
     while ($true) {
-        # Do nothing to keep the script running
+        # Sov i x minutter førend det kører igen
         Start-Sleep -Seconds 120
     }
 }
