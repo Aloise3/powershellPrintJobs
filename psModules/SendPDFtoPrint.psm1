@@ -16,14 +16,13 @@ function Start-SendPDFtoPrint {
     # Get a list of PDF files in the source folder
     $pdfFiles = Get-ChildItem -Path $sourceFolder -Filter *.pdf
 
-    Write-Host "PDF fil fundet: '$pdfFiles'"
+    
     $timestamp = Get-Date -Format "dd/MM/yyyy kl. hh:mm" #tidspunkt
     # Check if any PDF files are found
     if ($pdfFiles.Count -gt 0) {
         # Loop through each PDF file found
         foreach ($pdfFile in $pdfFiles) {
-            # Move the PDF file to the destination folder
-            Move-Item -Path $pdfFile.FullName -Destination $destinationFolder -Force
+            
 
 
             if ($ExcelFilePath) {
@@ -64,7 +63,9 @@ function Start-SendPDFtoPrint {
                     # Vent på printeren
                     $_ | Wait-PrinterJob 
                     }
-                }
+                } 
+            # Flyt filen til arkiv
+            Move-Item -Path $pdfFile.FullName -Destination $destinationFolder -Force
             
             # Send en mail
             Send-MailMessage -SmtpServer $SmtpServer -From $senderEmail -To $recipientEmail -Subject "Der er printet en fil - sendt til printer '$printerName'"  -Body "Attached is the PDF file that was printed." -Attachments $pdfFile.FullName
@@ -73,7 +74,7 @@ function Start-SendPDFtoPrint {
     }
 
 
-
+}
 
 Export-ModuleMember -Function Start-SendPDFtoPrint
 
