@@ -22,6 +22,8 @@ Til sidst sendes en notifikations-mail med den vedhæftede fil og filen rykkes o
 Denne metode fører dermed filen med over i email-notifikationen, men har den begrænsning, at man skal printe en pdf-fil på et bestemt drev. Ellers klares resten automatisk.
 
 
+OBS: Begge jobs skal sættes op i task scheduler. Dette da, selvom at de er kontinuerte funktioner, så kan sessionen i sjældne tilfælde slukkes. Også der er PDF -> Printer metoden bedre.
+
 ## Opsætning af task i scheduler
 
 ### Åbn Opgavestyring:
