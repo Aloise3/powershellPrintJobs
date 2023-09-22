@@ -23,8 +23,7 @@ if ($StartEllerSletProces -eq 1) {
     Start-PrintJobMonitor {
     -SmtpServer $smptServer #SMTP-server. Rediger ovenfor. 
     -userName $Env:UserName  #Brugerens navn
-    -ExcelFilePath $logpath 
-
+    -logpath $logpath 
     -SourceIdentifier $WMIjobNavn #Navn på job. Rediger ovenfor.
     -recipientEmail $ModtagerMail #Modtagermail. Rediger ovenfor.
     #Ikke brugte inputs:

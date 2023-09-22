@@ -34,7 +34,6 @@ $action = {
          Start-SendPDFtoPrint -SmtpServer $smptServer  -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder -logPath $logPath  -runspecificstuff 0 #Testvariabel til ikke fysisk at printe eller ligge i excel
              #Ikke brugte inputs:
             #$senderEmail - Default: PrintJobs
-            #$excelPath - Skal defineres øverst og inkluderes
             #$printerName - Kun hvis der skal bruges en ikke-standard printer.
             #$user - Sættes default til brugeren, der kører scriptet
     }
