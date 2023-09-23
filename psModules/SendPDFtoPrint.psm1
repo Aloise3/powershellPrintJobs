@@ -44,28 +44,25 @@ function Change-DefaultPrinter {
     )
 
     $originalDefaultPrinter = Get-WmiObject -Query "SELECT * FROM Win32_Printer WHERE Default=$true"
-    $desiredPrinter = Get-WmiObject -Query "SELECT * FROM Win32_Printer WHERE Name='$printerName'"
 
+    $desiredPrinter = Get-WmiObject -Query "SELECT * FROM Win32_Printer WHERE Name='$printerName'"
     if ($desiredPrinter) {
         $desiredPrinter.SetDefaultPrinter()
     }
-
     return $originalDefaultPrinter
 }
 
 function Return-DefaultPrinter {
     param (
-        [object]$originalDefaultPrinter
+        [string]$originalDefaultPrinter
     )
+    $returnPrinter  = Get-WmiObject -Query "SELECT * FROM Win32_Printer WHERE Name='$originalDefaultPrinter'"
+    $returnPrinter.SetDefaultPrinter()
 
-    if ($originalDefaultPrinter) {
-        $originalDefaultPrinter.SetDefaultPrinter()
-    }
 }
 
 function Start-execPrinter {
         param (
-            [string]$printerName,
             [string]$pdfFile
         )
               
@@ -107,14 +104,14 @@ function Start-SendPDFtoPrint {
                 $originalDefaultPrinter = Change-DefaultPrinter -printerName $printerName
             }
 
-            try {
-                Start-execPrinter -printerName $printerName -pdfFile $pdfFile.FullName
+            <#try {
+                Start-execPrinter -pdfFile $pdfFile.FullName
             } catch {
                     $errvariable = "Fejl: Print blev ikke sendt"
-            }
+            } #>
 
             if ($printerName) {
-                Return-DefaultPrinter -originalDefaultPrinter $originalDefaultPrinter
+                Return-DefaultPrinter -originalDefaultPrinter $originalDefaultPrinter[1].Name
             }
             
             if ($SmtpServer) {

@@ -34,7 +34,7 @@ $action = {
     $file = $Event.SourceEventArgs.Name
     if ($file -match '\.pdf') {
         # Sender job til at maile, pakke og dokumentere print
-         Start-SendPDFtoPrint -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder -logPath $logPath  #Testvariabel til ikke fysisk at printe eller ligge i excel
+         Start-SendPDFtoPrint -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder -logPath $logPath  -printerName "Microsoft Print to PDF"
 
             #Ikke brugte inputs:
                 #$senderEmail - Default: PrintJobs
