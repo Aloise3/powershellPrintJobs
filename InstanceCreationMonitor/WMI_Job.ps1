@@ -1,4 +1,4 @@
-﻿Import-Module -Name C:\Users\madsc\OneDrive\Skrivebord\MchWork\powershellPrintJobs\psModules\NotificationFromPrinter.psm1 -Force
+﻿Import-Module -Name C:\Users\madsc\OneDrive\Skrivebord\MchWork\powershellPrintJobs\InstanceCreationMonitor\Module\NotificationFromPrinter.psm1 -Force
 
 #Tilføj rettigheder til at importere scripts. Udkommenter den ene linje under.
 #Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
