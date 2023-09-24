@@ -8,15 +8,14 @@ function Write-Log {
         [string]$user,
         [string]$logFilePath
     )
-
-    if ($logFilePath -and $logFilePath -like "*.xlsx") {
-                    
+    if ($logFilePath -like "*.xlsx") {
+        Write-Host "Logfil er af .xlsx"            
         # Laver en excel-fil
         $excel = New-Object -ComObject Excel.Application
         $excel.Visible = $false
         $workbook = $excel.Workbooks.Open($logFilePath)  # Bruger prædefineret sti
         $worksheet = $workbook.Worksheets.Item(1) # Første side
-
+        Write-Host "Logfil åbnet..."
         # Kolonneoverskrifter
         $worksheet.Cells.Item(1, 1).Value2 = "Fil"
         $worksheet.Cells.Item(1, 2).Value2 = "Printet tidspunkt"
@@ -31,13 +30,13 @@ function Write-Log {
         $workbook.Save()
         $excel.Quit() 
     }
-    if ($logFilePath -and $logFilePath -like "*.txt") { #Hvis man foretrækker en tekstfil
+    if ($logFilePath -like "*.txt") { #Hvis man foretrækker en tekstfil
 
         $logMessage = "$time - Filnavn: $name, Bruger: $user."
         $logMessage | Out-File -FilePath $logFilePath -Append
     }
 }
-
+Export-ModuleMember -Function Write-Log
 
 function Start-PrintJobMonitor {
     param (
@@ -51,10 +50,8 @@ function Start-PrintJobMonitor {
 
     # WMI Query til at tjekke Printjobs
     $query = "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_PrintJob'"
-    Write-Host "Test1: '$userName'"
-    $Global:userName = $userName
-    Write-Host "Test2: '$Global:userName'"
-
+    $Global:userName = $userName 
+    
     # Registrer event der fyres af, når et nyt printerjob kommer
     Register-WmiEvent -Query $query -SourceIdentifier $SourceIdentifier -Action { #Tjekker om der er et nyt event
         $eventArgs = $Event.SourceEventArgs.NewEvent
@@ -62,21 +59,24 @@ function Start-PrintJobMonitor {
         $fileName = $printJob.Document #navn på printjob
         $printerName = $printJob.HostPrintQueue #navn på printer
         $ownerName = $printJob.Owner
-        $timestamp = Get-Date -Format "yyyy_MM_dd" #tidspunkt
-        Write-Host "ejernavn: '$ownerName'"
-        Write-Host "Test3: '$Global:userName'"
-
+        $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss" #tidspunkt
         if ($ownerName -eq $Global:userName) {
-            
+          
             if ($logpath) {
-                Write-Log -name $fileName -time $timestamp -user $ownerName -logFilePath $logpath
+                try {
+                Write-Log -name $fileName -time $timestamp -user $Global:userName -logFilePath $logpath
+                } catch {
+                Write-Host "Error: $_"
+                }                
             }
+
             if ($SmtpServer) {        
             # Sender en mail
                 Send-MailMessage -From $senderEmail -To $recipientEmail -Subject "Print Job udført på '$filename'" -Body "Print job '$fileName' er blevet printet af '$ownerName' d. '$timestamp' i printer '$printerName'. Log findes på '$logpath' " -SmtpServer $SmtpServer #-Attachments $destinationPath
             }
         }
-    } 
+    }
+    
 }
 
 Export-ModuleMember -Function Start-PrintJobMonitor
