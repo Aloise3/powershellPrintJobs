@@ -87,7 +87,7 @@ function Start-SendPDFtoPrint {
                     throw "Logfilen skal være af type .xlsx or .txt."
                 }
             } else {
-                throw "The specified path does not point to a valid file."
+                throw "Stien indeholder ikke en fil. Inkluder filen i stien."
             }
         })][string]$logPath,
         [Parameter(HelpMessage = "Printernavn på en fysisk printer, som computeren er forbundet til")]
@@ -96,7 +96,7 @@ function Start-SendPDFtoPrint {
             if ($printer -ne $null) {
                 $true
             } else {
-                throw "Printer '$_' does not exist or is not accessible on this computer."
+                throw "Printer '$_' eksisterer ikke eller er ikke koblet til pc'en."
             }
         })] [string]$printerName,
         [Parameter(HelpMessage = "Optionel. Navnet på afsender-email. Default: Printjobs")]
