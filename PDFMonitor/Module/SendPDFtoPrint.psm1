@@ -120,36 +120,52 @@ function Start-SendPDFtoPrint {
             
             if ($logPath) {
                 try {
-                    Write-Log -name $pdfFile.FullName -time $timestamp -user $env:USERNAME -logFilePath $logPath
+                    Write-Log -name $pdfFile.FullName -time $timestamp -user $user -logFilePath $logPath
                 } catch {
-                        $errvariable = "Fejl: Logning blev ikke gennemført"
+                    $errvariable =  $_
                 }
             }
 
-            if ($printerName) {
-                $originalDefaultPrinter = Change-DefaultPrinter -printerName $printerName
+            if ($printerName) { 
+                try {
+                    $originalDefaultPrinter = Change-DefaultPrinter -printerName $printerName
+                } catch {
+                    $errvariable =  $_
+                }
             }
 
             <#try {
                 Start-execPrinter -pdfFile $pdfFile.FullName
             } catch {
-                    $errvariable = "Fejl: Print blev ikke sendt"
+                    $errvariable =  $_
             } #>
 
             if ($printerName) {
-                Return-DefaultPrinter -originalDefaultPrinter $originalDefaultPrinter[1].Name
+                try {
+                    Return-DefaultPrinter -originalDefaultPrinter $originalDefaultPrinter[1].Name
+                } catch {
+                    $errvariable =  $_
+                }
             }
             
             if ($SmtpServer) {
                  # Send en mail
+
+                if ($errvariable) {
+                    $subject = "MED FEJL! Der er printet en fil - sendt til printer '$printerName'"
+                    $body = "Den printede fil er vedhæftet. Der er sket en fejl i processen: '$errvariable'"
+                } else{
+                    $subject = "Der er printet en fil - sendt til printer '$printerName'"
+                    $body = "Den printede fil er vedhæftet."
+                }
                 try {
-                    Send-MailMessage -SmtpServer $SmtpServer -From $senderEmail -To $recipientEmail -Subject "Der er printet en fil - sendt til printer '$printerName'"  -Body "Attached is the PDF file that was printed." -Attachments $pdfFile.FullName
+                    Send-MailMessage -SmtpServer $SmtpServer -From $senderEmail -To $recipientEmail -Subject $subject  -Body $body -Attachments $pdfFile.FullName
                 } catch {
                         if (-not $errvariable) {
-                            $errvariable = "Fejl: Mailafsendelse"
+                            $errvariable = $_
                         }
                         $body = "Mail for printjob med vedhæftning har fejlet pga. '$errvariable'"
-                        Send-MailMessage -SmtpServer $SmtpServer -From $senderEmail -To $recipientEmail -Subject "Printjob har fejlet'"  -Body $body
+                        Send-MailMessage -SmtpServer $SmtpServer -From $senderEmail -To $recipientEmail -Subject "Printjob har fejlet pga. '$errvariable'"  -Body $body
                 }
             }
             Move-Item -Path $pdfFile.FullName -Destination $destinationFolder -Force #Rykker til arkiv
