@@ -50,7 +50,7 @@ function Start-PrintJobMonitor {
     )
 
     # WMI Query til at tjekke Printjobs
-    $query = "SELECT * FROM __InstanceCreationEvent WITHIN 5 WHERE TargetInstance ISA 'Win32_PrintJob'"
+    $query = "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_PrintJob'"
     Write-Host "Test1: '$userName'"
     $Global:userName = $userName
     Write-Host "Test2: '$Global:userName'"

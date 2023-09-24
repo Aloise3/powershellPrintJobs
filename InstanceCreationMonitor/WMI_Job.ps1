@@ -5,7 +5,7 @@
 
 ###############REDIGER VARIABLE #######################
 
-$StartEllerSletProces = 1  # Sættes til 0 hvis du vil fjerne processen
+$StartEllerSletProces = 0  # Sættes til 0 hvis du vil fjerne processen
 
 $WMIjobNavn = "NotificationFromPrinter" #Navn på proces der skal laves. Bruges til at lukke den ned igen, hvis der ikke længere er behov for det.
 
