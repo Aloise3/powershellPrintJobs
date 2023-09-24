@@ -19,17 +19,11 @@ $logpath = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\logbog.xlsx"  #Excel ti
 ############### REDIGER VARIABLE SLUT #######################
 
 if ($StartEllerSletProces -eq 1) {
-
-    Start-PrintJobMonitor {
-    -SmtpServer $smptServer #SMTP-server. Rediger ovenfor. 
-    -userName $Env:UserName  #Brugerens navn
-    -logpath $logpath 
-    -SourceIdentifier $WMIjobNavn #Navn på job. Rediger ovenfor.
-    -recipientEmail $ModtagerMail #Modtagermail. Rediger ovenfor.
-    #Ikke brugte inputs:
+    Start-PrintJobMonitor     -SmtpServer $smptServer     -userName $Env:UserName -logpath $logpath -SourceIdentifier $WMIjobNavn -recipientEmail $ModtagerMail 
+     #Ikke brugte inputs:
     #senderEmail - Default: PrintJobs
 
-    }
+    
 
 
 }   else {

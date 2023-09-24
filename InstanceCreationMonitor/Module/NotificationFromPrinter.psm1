@@ -50,9 +50,11 @@ function Start-PrintJobMonitor {
     )
 
     # WMI Query til at tjekke Printjobs
-    $query = "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_PrintJob'"
+    $query = "SELECT * FROM __InstanceCreationEvent WITHIN 5 WHERE TargetInstance ISA 'Win32_PrintJob'"
+    Write-Host "Test1: '$userName'"
+    $Global:userName = $userName
+    Write-Host "Test2: '$Global:userName'"
 
-    
     # Registrer event der fyres af, når et nyt printerjob kommer
     Register-WmiEvent -Query $query -SourceIdentifier $SourceIdentifier -Action { #Tjekker om der er et nyt event
         $eventArgs = $Event.SourceEventArgs.NewEvent
@@ -61,9 +63,10 @@ function Start-PrintJobMonitor {
         $printerName = $printJob.HostPrintQueue #navn på printer
         $ownerName = $printJob.Owner
         $timestamp = Get-Date -Format "yyyy_MM_dd" #tidspunkt
+        Write-Host "ejernavn: '$ownerName'"
+        Write-Host "Test3: '$Global:userName'"
 
-
-        if ($ownerName = $userName) {
+        if ($ownerName -eq $Global:userName) {
             
             if ($logpath) {
                 Write-Log -name $fileName -time $timestamp -user $ownerName -logFilePath $logpath
@@ -73,7 +76,7 @@ function Start-PrintJobMonitor {
                 Send-MailMessage -From $senderEmail -To $recipientEmail -Subject "Print Job udført på '$filename'" -Body "Print job '$fileName' er blevet printet af '$ownerName' d. '$timestamp' i printer '$printerName'. Log findes på '$logpath' " -SmtpServer $SmtpServer #-Attachments $destinationPath
             }
         }
-    }
+    } 
 }
 
 Export-ModuleMember -Function Start-PrintJobMonitor
