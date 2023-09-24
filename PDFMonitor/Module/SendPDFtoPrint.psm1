@@ -75,13 +75,39 @@ function Start-execPrinter {
 
 function Start-SendPDFtoPrint {
     param (
+        [Parameter(HelpMessage = "Optionel. Navn på SMTP-server. Bruges, hvis man vil sende en mail efter at filen er printet til fysisk printer.")]
         [string]$SmtpServer,
-        [string]$logPath, #Bruges
+        [Parameter(HelpMessage = "Sti til en .xlsx eller .txt fil")]
+        [ValidateScript({
+            if (Test-Path $_ -PathType Leaf) {
+                $extension = [System.IO.Path]::GetExtension($_)
+                if ($extension -eq ".xlsx" -or $extension -eq ".txt") {
+                    $true
+                } else {
+                    throw "Logfilen skal være af type .xlsx or .txt."
+                }
+            } else {
+                throw "The specified path does not point to a valid file."
+            }
+        })][string]$logPath,
+        [Parameter(HelpMessage = "Printernavn på en fysisk printer, som computeren er forbundet til")]
+        [ValidateScript({
+            $printer = Get-WmiObject -Query "SELECT * FROM Win32_Printer WHERE Name = '$_'"
+            if ($printer -ne $null) {
+                $true
+            } else {
+                throw "Printer '$_' does not exist or is not accessible on this computer."
+            }
+        })] [string]$printerName,
+        [Parameter(HelpMessage = "Optionel. Navnet på afsender-email. Default: Printjobs")]
         [string]$senderEmail = "PrintJobs", 
-        [string]$recipientEmail, #Bruges
+        [Parameter(HelpMessage = "Optionel. Navnet på modtager-email. Kræver at SmtpServer er defineret.")]
+        [string]$recipientEmail, 
+        [Parameter(Mandatory=$true, HelpMessage = "Obligatorisk. Sti til folder, som indeholder den PDF-printede fil")]
         [string]$sourceFolder,
+        [Parameter(Mandatory=$true, HelpMessage = "Obligatorisk. Sti til arkivering af den PDF-printede fil")]
         [string]$destinationFolder,
-        [string]$printerName, 
+        [Parameter(HelpMessage = "Optionel. Bruger som logges for PDF-fil. Default: Brugeren på powershell-sessionen.")]
         [string]$user = $env:USERNAME
     )
 
