@@ -22,6 +22,15 @@ $logPath = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\logbog.xlsx"  #Excel ti
 
 ############### REDIGER VARIABLE SLUT #######################
 
+
+#****Hvis der allerede findes en pdf fil********
+<#Get-ChildItem -Path $sourceFolder -Filter *.pdf | ForEach-Object {
+    $file = $_.Name
+    # Trigger funktion hvis der allerede eksisterer filer
+    Start-SendPDFtoPrint -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder -logPath $logPath  -printerName "Microsoft Print to PDF"
+} #>
+#*****SLUT*********
+
 # FileSystemWatcher object
 $watcher = New-Object System.IO.FileSystemWatcher
 $watcher.Path = $sourceFolder
@@ -34,13 +43,14 @@ $action = {
     $file = $Event.SourceEventArgs.Name
     if ($file -match '\.pdf') {
         # Sender job til at maile, pakke og dokumentere print
-         Start-SendPDFtoPrint -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder -logPath $logPath  -printerName "Microsoft Print to PDF"
+         Start-SendPDFtoPrint -recipientEmail $ModtagerMail  -sourceFolder $sourceFolder -destinationFolder $destinationFolder -logPath $logPath  
 
             #Ikke brugte inputs:
                 #$senderEmail - Default: PrintJobs
                 #$printerName - Kun hvis der skal bruges en ikke-standard printer.
                 #$smtpserver - Tilføjes hvis man vil sende en mail. 
                 #$user - Sættes default til brugeren, der kører scriptet
+
     }
 }
 
