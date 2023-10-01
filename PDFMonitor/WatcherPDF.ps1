@@ -1,5 +1,8 @@
 ﻿Import-Module -Name C:\Users\madsc\OneDrive\Skrivebord\MchWork\powershellPrintJobs\PDFMonitor\Module\SendPDFtoPrint.psm1 -Force
 
+
+#Tryk F8 for at køre en enkelt linje. F5 for at køre det hele.
+
 #Tilføj rettigheder til at importere scripts. Udkommenter den ene linje under.
 #Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 

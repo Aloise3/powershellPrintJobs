@@ -1,16 +1,17 @@
 # powershellPrintJobs
 
-## Generel info
 Dette modul viser anvendelsen af to forskellige metoder til at overvåge og opsnappe information om printerejobs og tilhørende filer. 
 
-### Metode 1: WMI-Event til logning og mailing (..\InstanceCreationMonitor\WMI_Job.ps1)
+Scripts er af filtype .ps1 og moduler (til bagvedliggende funktioner som logning og mailafsendelse) er af .psm1
+
+## Metode 1: WMI-Event til logning og mailing (..\InstanceCreationMonitor\WMI_Job.ps1)
 
 Denne metode opsnapper Events, der sendes til printere, som computeren er forbundet til og opsamler filnavn, tidspunkt og bruger i en logfil (.xlsx). 
 Derefter sendes en mail med relevante informationer.
 
 [Hvad er et WMI-event?](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/register-wmievent?view=powershell-5.1)
 
-#### Registering af job
+### Registering af job
 
 Man åbner ..\InstanceCreationMonitor\WMI_Job.ps1 og tilretter nedenstående sti til den korrekte for modulet NotificationFromPrinter. 
 ```powershell
@@ -71,26 +72,33 @@ if ($StartEllerSletProces -eq 1) {
         Stop-PrintJobMonitor -NameOfProces $WMIjobNavn
     }
 ```
-#### Skal sættes op i task scheduler
+### Skal sættes op i task scheduler
 Da et WMI-event lukker ned samtidigt med powershell-sessionen kan det være fordelagtigt at opsætte et task-scheduler job, der sættes i gang, når computeren starter, når man logger ind igen og på givne intervaller. 
 
 Se derfor [Opsætning af task i scheduler](#Opsætning-af-task-i-scheduler) for opsætning.
 
-### Metode 2: Opsamling af PDF-print til videre distribuering (..\PDFMonitor\WatcherPDF.ps1)
+## Metode 2: Opsamling af PDF-print til videre distribuering (..\PDFMonitor\WatcherPDF.ps1)
 
 Denne metode antager, at man initielt laver print til pdf, og ligger pdf-filen i en mappe, der observeres af et program. På et arbitrært interval tjekkes folderen for nye pdf filer. Eksemplet tjekker hvert 10. sekund, men hver 2-5 minutter er nok mere realistisk i virkeligheden.
 
 Findes en (eller flere) ny pdf-fil logges det i et excel-ark, samt sendes et fysisk printerjob til en navngivet printer. 
 Til sidst sendes en notifikations-mail med den vedhæftede fil og filen rykkes over i en 'Arkiv'-mappe.
 
-Denne metode fører dermed filen med over i email-notifikationen, men har den begrænsning, at man skal printe en pdf-fil på et bestemt drev. Ellers klares resten automatisk.
+Denne metode fører dermed filen med over i email-notifikationen, men har den begrænsning, at man skal printe en pdf-fil på en bestemt mappe. Ellers klares resten automatisk.
+
+### Opsætning af PDF-watcher
+Man åbner ..\PDFMonitor\WatcherPDF.ps1 og tilretter nedenstående sti til den korrekte for modulet NotificationFromPrinter. 
+```powershell
+Import-Module -Name C:\Users\Skrivebord\powershellPrintJobs\PDFMonitor\Module\SendPDFtoPrint.psm1 -Force
+```
+Dette modul indeholder funktionen ```Start-SendPDFtoPrint```.
+
+Powershell kalder funktionsargumenter med -'Argument', hvorefter at input skrives ind efter. Variable klassificeres med et '$' foran navnet. 
+Mail sendes med powershell-funktionen [Send-MailMessage](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage?view=powershell-7.3).
+Syntaksen er således:
 
 
-OBS: Begge jobs skal sættes op i task scheduler. Dette da, selvom at de er kontinuerte funktioner, så kan sessionen i sjældne tilfælde slukkes. Også der er PDF -> Printer metoden bedre.
-
-
-
-#### Skal sættes op i task scheduler
+### Skal sættes op i task scheduler
 Da PDF-watcheren lukker ned samtidigt med powershell-sessionen kan det være fordelagtigt at opsætte et task-scheduler job, der sættes i gang, når computeren starter, når man logger ind igen og på givne intervaller. 
 
 Se derfor [Opsætning af task i scheduler](#Opsætning-af-task-i-scheduler) for opsætning.
