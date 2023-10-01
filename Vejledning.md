@@ -104,7 +104,7 @@ Skriv "Opgavestyring" og tryk på Enter.
 
 I Opgaveplanlægger-vinduet skal du klikke på "Opret basisopgave..." eller "Opret opgave..." i højre rude. 
 
-![Alt Text](pics\HovedvindueTaskScheduler.png)
+![Alt Text](pics/HovedvindueTaskScheduler.png)
 
 
 ### Konfigurér triggers:
