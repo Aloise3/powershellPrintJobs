@@ -90,7 +90,10 @@ OBS: Begge jobs skal sættes op i task scheduler. Dette da, selvom at de er kont
 
 
 
+#### Skal sættes op i task scheduler
+Da PDF-watcheren lukker ned samtidigt med powershell-sessionen kan det være fordelagtigt at opsætte et task-scheduler job, der sættes i gang, når computeren starter, når man logger ind igen og på givne intervaller. 
 
+Se derfor [Opsætning af task i scheduler](#Opsætning-af-task-i-scheduler) for opsætning.
 
 
 ## Opsætning af task i scheduler
@@ -109,21 +112,24 @@ I Opgaveplanlægger-vinduet skal du klikke på "Opret basisopgave..." eller "Opr
 
 ### Konfigurér triggers:
 
-I fanen udløsere skal du definere, hvornår og hvor ofte du vil have, at opgaven skal køre. Du kan vælge mellem indstillinger som "Dagligt," "Ugentligt," "Månedligt" eller "Ved logon." Angiv startdato og -tidspunkt.
+I fanen "udløsere" skal du definere, hvornår og hvor ofte du vil have, at opgaven skal køre. Du kan vælge mellem indstillinger som "Dagligt," "Ugentligt," "Månedligt" eller "Ved logon." Angiv startdato og -tidspunkt.
+![Alt Text](pics/TriggerOptions.png)
 
 ### Konfigurér Handlinger:
 
 I fanen Handlinger skal du definere, hvad opgaven skal gøre, når den køres. Du kan vælge at starte et program, sende en e-mail, vise en meddelelse og mere. Hvis du vil køre en PowerShell-script, skal du vælge "Start et program" og angive stien til powershell.exe samt scriptet som et argument.
+![Alt Text](pics/ActionsInput.png)
 
-Ofte ligger powershell på "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" og i Argumentet tilføjet scriptet, der skal køres "C:\Path\To\YourScript.ps1".
+Programmet der skal køres er powershell.exe. 
+Ofte ligger powershell på "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe". På en server kan det være anderledes. I argumentet tilføjet scriptet, der skal køres "C:\Path\To\YourScript.ps1".
 
-Eksempel på at køre det usynligt i baggrunden:
-
+Man kan tilføje betingelser til kørslen af scriptet. Eksempel på at køre det usynligt i baggrunden:
+```powershell
 -ExecutionPolicy Bypass -File C:\Users\madsc\OneDrive\Skrivebord\MyModules\Scripts\TestPrint
+```
 
-Sættes til at køre ved opstart + en gang per x antal minutter
+Jobbet sættes til at køre ved opstart/Logon + en gang per x antal minutter
 
 
 
 
-[def]: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/register-wmievent?view=powershell-5.1
