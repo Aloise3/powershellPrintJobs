@@ -71,10 +71,10 @@ if ($StartEllerSletProces -eq 1) {
         Stop-PrintJobMonitor -NameOfProces $WMIjobNavn
     }
 ```
-#### Opsætning i task scheduler
+#### Skal sættes op i task scheduler
 Da et WMI-event lukker ned samtidigt med powershell-sessionen kan det være fordelagtigt at opsætte et task-scheduler job, der sættes i gang, når computeren starter, når man logger ind igen og på givne intervaller. 
 
-Se derfor [Opsætning af task i scheduler](## Opsætning af task i scheduler).
+Se derfor [Opsætning af task i scheduler](#Opsætning af task i scheduler) for opsætning.
 
 ### Metode 2: Opsamling af PDF-print til videre distribuering (..\PDFMonitor\WatcherPDF.ps1)
 
