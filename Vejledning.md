@@ -12,7 +12,7 @@ Derefter sendes en mail med relevante informationer.
 
 #### Registering af job
 
-Man åbner WMI_Job.ps1 og tilretter nedenstående sti til den korrekte for modulet NotificationFromPrinter. 
+Man åbner ..\InstanceCreationMonitor\WMI_Job.ps1 og tilretter nedenstående sti til den korrekte for modulet NotificationFromPrinter. 
 ```powershell
 Import-Module -Name C:\Users\Skrivebord\powershellPrintJobs\InstanceCreationMonitor\Module\NotificationFromPrinter.psm1 -Force
 ```
@@ -103,11 +103,9 @@ Skriv "Opgavestyring" og tryk på Enter.
 ### Opret en Ny Opgave:
 
 I Opgaveplanlægger-vinduet skal du klikke på "Opret basisopgave..." eller "Opret opgave..." i højre rude. 
-Følg Guiden:
 
-Hvis du valgte "Opret basisopgave," vil en guide guide dig gennem processen. Følg vejledningen og angiv nødvendige oplysninger som opgavens navn og beskrivelse.
+![Alt Text](..\..\powershellPrintJobs\pics\HovedvindueTaskScheduler.png)
 
-Hvis du valgte "Opret opgave," får du mere avancerede indstillinger. Udfyld fanerne Generelt, Udløsere, Handlinger og Betingelser med de passende indstillinger for din opgave.
 
 ### Konfigurér triggers:
 
