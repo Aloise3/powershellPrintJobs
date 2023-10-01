@@ -1,7 +1,5 @@
 # powershellPrintJobs
 
-**OBS: Lavet i en hurtig vending privat og fungerer på eget lokale miljø. Kræver tilpasning af større eller mindre art afhængig af serveropsætning. Jeg har heller ikke en smtp-server eller en fysisk printer, men de to funktioner er ret ligetil at opstille. Kræver muligvis nogle administraterrettigheder til at ændre printer osv.**
-
 ## Generel info
 Dette modul viser anvendelsen af to forskellige metoder til at overvåge og opsnappe information om printerejobs og tilhørende filer. 
 
@@ -10,11 +8,13 @@ Dette modul viser anvendelsen af to forskellige metoder til at overvåge og opsn
 Denne metode opsnapper Events, der sendes til printere, som computeren er forbundet til og opsamler filnavn, tidspunkt og bruger i en logfil (.xlsx). 
 Derefter sendes en mail med relevante informationer.
 
+[Hvad er et WMI-event?](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/register-wmievent?view=powershell-5.1)
+
 #### Registering af job
 
 Man åbner WMI_Job.ps1 og tilretter nedenstående sti til den korrekte for modulet NotificationFromPrinter. 
 ```powershell
-Import-Module -Name C:\Users\Bruger\Skrivebord\MchWork\powershellPrintJobs\InstanceCreationMonitor\Module\NotificationFromPrinter.psm1 -Force
+Import-Module -Name C:\Users\Skrivebord\powershellPrintJobs\InstanceCreationMonitor\Module\NotificationFromPrinter.psm1 -Force
 ```
 Dette modul indeholder funktionerne ```Start-PrintJobMonitor``` og ```Stop-PrintJobMonitor```
 
@@ -31,7 +31,7 @@ Start-PrintJobMonitor -userName "TestBruger" -logpath "C:\Users\madsc\OneDrive\S
 
     logpath: Stien til logfilen, som enten kan være af .xlsx eller .txt format. Stien skal indeholde filnavnet, og filen skal eksistere. 
 
-    SmtpServer: Navnet på SMTP-serveren, som mailen skal sendes gennem. Kræves for at sende en mail.
+    SmtpServer: Navnet på SMTP-serveren, som mailen skal sendes gennem. Kræves for at sende en mail. [Dokumentation](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage?view=powershell-7.3).
 
     recipientEmail: Navnet på den mail, der skal modtage emailen. Funktionen skal konfigureres til at linke brugernavne op til mails, hvis der skal sendes mails ud til flere brugere.
 
@@ -42,7 +42,7 @@ Da vi nu kender funktionens inputs skal variable sættes. I WMI_Job.ps1 køres k
 
 ```powershell
 #Importerer funktionen til at overvåge printerjobs
-Import-Module -Name C:\Users\madsc\OneDrive\Skrivebord\MchWork\powershellPrintJobs\InstanceCreationMonitor\Module\NotificationFromPrinter.psm1 -Force
+Import-Module -Name C:\Users\Skrivebord\powershellPrintJobs\InstanceCreationMonitor\Module\NotificationFromPrinter.psm1 -Force
 
 ###############REDIGER VARIABLE #######################
 
@@ -53,7 +53,7 @@ $WMIjobNavn = "NotificationFromPrinter" #Navn på proces der skal laves. Bruges 
 $ModtagerMail = "abc@123.dk"  #Mail, der skal modtage notifikationer
 
 $smptServer = "din.smtp.server.dk" #SMTP-server. Kræver eventuelt også, at der logges ind. 
-#Funktionen Send-MailMessage's dokumentation: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage?view=powershell-7.3
+#Funktionen Send-MailMessage's [Dokumentation](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage?view=powershell-7.3): 
 
 $logpath = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\logbog.xlsx"  #Excel til oversigt over dine historiske printjobs. Kommenter ud hvis det ikke ønskes
 
@@ -123,3 +123,6 @@ Eksempel på at køre det usynligt i baggrunden:
 Sættes til at køre ved opstart + en gang per x antal minutter
 
 
+
+
+[def]: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/register-wmievent?view=powershell-5.1
