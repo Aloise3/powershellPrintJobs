@@ -18,7 +18,9 @@ Import-Module -Name C:\Users\Skrivebord\powershellPrintJobs\InstanceCreationMoni
 ```
 Dette modul indeholder funktionerne ```Start-PrintJobMonitor``` og ```Stop-PrintJobMonitor```
 
-Powershell kalder funktionsargumenter med -<Argument>, hvorefter at input skrives ind efter. Variable klassificeres med et '$' foran navnet. Syntaksen er således:
+Powershell kalder funktionsargumenter med -'Argument', hvorefter at input skrives ind efter. Variable klassificeres med et '$' foran navnet. 
+Mail sendes med powershell-funktionen [Send-MailMessage](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage?view=powershell-7.3).
+Syntaksen er således:
 
 ```powershell
 #Eksempel på input
@@ -31,7 +33,7 @@ Start-PrintJobMonitor -userName "TestBruger" -logpath "C:\Users\madsc\OneDrive\S
 
     logpath: Stien til logfilen, som enten kan være af .xlsx eller .txt format. Stien skal indeholde filnavnet, og filen skal eksistere. 
 
-    SmtpServer: Navnet på SMTP-serveren, som mailen skal sendes gennem. Kræves for at sende en mail. [Dokumentation](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage?view=powershell-7.3).
+    SmtpServer: Navnet på SMTP-serveren, som mailen skal sendes gennem. Kræves for at sende en mail. 
 
     recipientEmail: Navnet på den mail, der skal modtage emailen. Funktionen skal konfigureres til at linke brugernavne op til mails, hvis der skal sendes mails ud til flere brugere.
 
@@ -53,7 +55,6 @@ $WMIjobNavn = "NotificationFromPrinter" #Navn på proces der skal laves. Bruges 
 $ModtagerMail = "abc@123.dk"  #Mail, der skal modtage notifikationer
 
 $smptServer = "din.smtp.server.dk" #SMTP-server. Kræver eventuelt også, at der logges ind. 
-#Funktionen Send-MailMessage's [Dokumentation](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage?view=powershell-7.3): 
 
 $logpath = "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\logbog.xlsx"  #Excel til oversigt over dine historiske printjobs. Kommenter ud hvis det ikke ønskes
 
