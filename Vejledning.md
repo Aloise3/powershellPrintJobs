@@ -6,6 +6,8 @@ Scripts er af filtype .ps1 og moduler (til bagvedliggende funktioner som logning
 
 ## Metode 1: WMI-Event til logning og mailing (..\InstanceCreationMonitor\WMI_Job.ps1)
 
+[Eksempel på jobbet](https://www.youtube.com/watch?v=RAcydiUZTrc)
+
 Denne metode opsnapper Events, der sendes til printere, som computeren er forbundet til og opsamler filnavn, tidspunkt og bruger i en logfil (.xlsx). 
 Derefter sendes en mail med relevante informationer.
 
@@ -27,7 +29,7 @@ Syntaksen er således:
 #Eksempel på input
 Start-PrintJobMonitor -userName "TestBruger" -logpath "C:\Users\madsc\OneDrive\Skrivebord\PrintTest" -SourceIdentifier NotificationFromPrinter
 
-#<Forklaring af samtlige inputvariable
+<#Forklaring af samtlige inputvariable
     SourceIdentifier: Navn på WMI-jobbet. Dette bruges til at identificere processen, så den kan lukkes ned igen mm.
 
     userName: Brugeren, som printjobbet skal valideres imod. Den sender kun en mail til brugeren, som har printet filen. Default: Brugernavn på den bruger, der sætter jobbet op.
@@ -95,7 +97,28 @@ Dette modul indeholder funktionen ```Start-SendPDFtoPrint```.
 
 Powershell kalder funktionsargumenter med -'Argument', hvorefter at input skrives ind efter. Variable klassificeres med et '$' foran navnet. 
 Mail sendes med powershell-funktionen [Send-MailMessage](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage?view=powershell-7.3).
-Syntaksen er således:
+Et eksempel på syntaksen er således:
+```powershell
+Start-SendPDFtoPrint -sourceFolder "C:\Users\madsc\OneDrive\Skrivebord\PrintTest" -logPath "C:\Users\madsc\OneDrive\Skrivebord\PrintTest\logbog.xlsx"
+<#Forklaring af samtlige inputvariable
+    sourceFolder: Mappen, som man skal printe PDF-dokumentet til for at watcheren kan opsnappe .
+
+    user: Brugeren, som logges i logbogen imod. Default: Brugernavn på den bruger, der sætter jobbet op.
+
+    logpath: Stien til logfilen, som enten kan være af .xlsx eller .txt format. Stien skal indeholde filnavnet, og filen skal eksistere. 
+
+    SmtpServer: Navnet på SMTP-serveren, som mailen skal sendes gennem. Kræves for at sende en mail. 
+
+    recipientEmail: Navnet på den mail, der skal modtage emailen. Funktionen skal konfigureres til at linke brugernavne op til mails, hvis der skal sendes mails ud til flere brugere.
+
+    senderEmail: Afsender på mail. Behøver ikke at være en valid mailadresse. Default: Printjobs 
+
+    destinationFolder: Mappe, som PDF-filen skal arkiveres på.
+
+    printerName: Printer, som PDF-filen udskrives til, når den er blevet logget og arkiveret. Default: Standardprinter på computeren.
+#>
+
+
 
 
 ### Skal sættes op i task scheduler
